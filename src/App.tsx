@@ -6,7 +6,7 @@ import data1 from './data1';
 import data2 from './data2';
 
 const getDataKey = (d) => `${d.guid}${d.valueType}`;
-
+const xDomain = [new Date(2022, 5, 4).valueOf(), new Date(2022, 5, 5).valueOf()]
 
 const colors = ['red', 'green', 'blue', 'yellow'];
 
@@ -14,7 +14,7 @@ const Chart = (props: { series: string[], data: any[] }) => {
   const { data, series, } = props;
   return (<ResponsiveContainer>
     <ComposedChart data={data} syncId={'timeStampId'}>
-      <XAxis dataKey={'timeStampId'} tickFormatter={d => new Date(d).toLocaleDateString()} />
+      <XAxis dataKey={'timeStampId'} domain={xDomain} tickFormatter={d => new Date(d).toLocaleDateString()} type='number' />
       <YAxis domain={[0, 15]} />
       {series.map((d, i) => (<Line key={d} dataKey={d} dot={false} stroke={colors[i]}></Line>))}
       <Tooltip />
@@ -27,7 +27,7 @@ const Chart2 = (props: { data: any[], allowDuplicatedCategory?: boolean }) => {
   const series = _.uniq(data.map(d => getDataKey(d)))
   return (<ResponsiveContainer>
     <ComposedChart syncId={'timeStampId'}>
-      <XAxis dataKey={'timeStampId'} tickFormatter={d => new Date(d).toLocaleDateString()} allowDuplicatedCategory={allowDuplicatedCategory} />
+      <XAxis dataKey={'timeStampId'} domain={xDomain} tickFormatter={d => new Date(d).toLocaleDateString()} allowDuplicatedCategory={allowDuplicatedCategory} type='number' />
       <YAxis domain={[0, 15]} />
       {series.map((d, i) => {
         const currentData = data.filter(v => getDataKey(v) === d).map(v => ({ ...v, timeStampId: new Date(v.timeStamp).valueOf() }));
