@@ -11,12 +11,28 @@ const getDataKey = (d) => `${d.guid}${d.valueType}`;
 const colors = ['red', 'green', 'blue', 'yellow'];
 
 const Chart = (props: { series: string[], data: any[] }) => {
-  const { data, series } = props;
+  const { data, series, } = props;
   return (<ResponsiveContainer>
     <ComposedChart data={data} syncId={'timeStampId'}>
       <XAxis dataKey={'timeStampId'} tickFormatter={d => new Date(d).toLocaleDateString()} />
       <YAxis domain={[0, 15]} />
       {series.map((d, i) => (<Line key={d} dataKey={d} dot={false} stroke={colors[i]}></Line>))}
+      <Tooltip />
+    </ComposedChart>
+  </ResponsiveContainer>);
+}
+
+const Chart2 = (props: { data: any[], allowDuplicatedCategory?: boolean }) => {
+  const { allowDuplicatedCategory, data } = props;
+  const series = _.uniq(data.map(d => getDataKey(d)))
+  return (<ResponsiveContainer>
+    <ComposedChart syncId={'timeStampId'}>
+      <XAxis dataKey={'timeStampId'} tickFormatter={d => new Date(d).toLocaleDateString()} allowDuplicatedCategory={allowDuplicatedCategory} />
+      <YAxis domain={[0, 15]} />
+      {series.map((d, i) => {
+        const currentData = data.filter(v => getDataKey(v) === d).map(v => ({ ...v, timeStampId: new Date(v.timeStamp).valueOf() }));
+        return (<Line key={d} data={currentData} dataKey={'value'} dot={false} stroke={colors[i]}></Line>);
+      })}
       <Tooltip />
     </ComposedChart>
   </ResponsiveContainer>);
@@ -34,14 +50,35 @@ function App() {
   }, [])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', height: '400px' }} className='p4'>
-      <div style={{ flexBasis: '50%' }} className='m4 bg-gray'>
-        <Chart data={mapped1} series={s1} />
+    <>
+      <h3>Global data, use dataKey</h3>
+      <div style={{ display: 'flex', flexDirection: 'row', height: '400px' }} className='p4'>
+        <div style={{ flexBasis: '50%' }} className='m4 bg-gray'>
+          <Chart data={mapped1} series={s1} />
+        </div>
+        <div style={{ flexBasis: '50%' }} className='m4 bg-gray'>
+          <Chart data={mapped2} series={s2} />
+        </div>
       </div>
-      <div style={{ flexBasis: '50%' }} className='m4 bg-gray'>
-        <Chart data={mapped2} series={s2} />
+      <h3>Individual data, do not set allowDuplicateCategory</h3>
+      <div style={{ display: 'flex', flexDirection: 'row', height: '400px' }} className='p4'>
+        <div style={{ flexBasis: '50%' }} className='m4 bg-gray'>
+          <Chart2 data={data1} />
+        </div>
+        <div style={{ flexBasis: '50%' }} className='m4 bg-gray'>
+          <Chart2 data={data2} />
+        </div>
       </div>
-    </div>
+      <h3>Individual data, set allowDuplicateCategory to false</h3>
+      <div style={{ display: 'flex', flexDirection: 'row', height: '400px' }} className='p4'>
+        <div style={{ flexBasis: '50%' }} className='m4 bg-gray'>
+          <Chart2 data={data1} allowDuplicatedCategory={false} />
+        </div>
+        <div style={{ flexBasis: '50%' }} className='m4 bg-gray'>
+          <Chart2 data={data2} allowDuplicatedCategory={false} />
+        </div>
+      </div>
+    </>
   )
 }
 

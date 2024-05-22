@@ -1,30 +1,19 @@
-# React + TypeScript + Vite
+# when using data globally: no line
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+In this case, use dataKey per line, and a global array of data. In this case, no green line is displayed:
 
-Currently, two official plugins are available:
+![no line](./images/sync-no-line.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# when using data individually: extra line + no sync
 
-## Expanding the ESLint configuration
+When setting data on each line, an extra line appears, green tooltip is incorrect, and syn c between trends is broken
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+![no sync](./images/green-line-no-sync.png)
 
-- Configure the top-level `parserOptions` property like this:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+# when disallowing duplicate category: no sync
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+When setting data on each line, and sync between trends is broken
+
+![no duplciate category](./images/disallow-duplicate-category.png)
+
